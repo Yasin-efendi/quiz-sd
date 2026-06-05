@@ -2,6 +2,7 @@ import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       name: 'credentials',
@@ -30,26 +31,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   ],
   pages: {
     signIn: '/admin/login',
+    signOut: '/admin/login',
   },
   session: {
     strategy: 'jwt',
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user
-      const isAdminRoute = nextUrl.pathname.startsWith('/admin')
-      const isLoginPage = nextUrl.pathname === '/admin/login'
-
-      if (isAdminRoute && !isLoginPage && !isLoggedIn) {
-        return Response.redirect(new URL('/admin/login', nextUrl))
-      }
-
-      if (isLoginPage && isLoggedIn) {
-        return Response.redirect(new URL('/admin', nextUrl))
-      }
-
-      return true
-    },
     async jwt({ token, user }) {
       if (user) token.role = 'admin'
       return token
