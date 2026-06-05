@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Quiz SD
 
-## Getting Started
+Aplikasi kuis pembelajaran untuk Sekolah Dasar berbasis Next.js 16 + Supabase.
 
-First, run the development server:
+## Fitur
 
-```bash
+- Kuis interaktif dengan navigasi soal bebas
+- Halaman hasil dengan skor dan pembahasan lengkap
+- Panel admin untuk manajemen pelajaran, pertemuan, dan soal
+- Riwayat pengerjaan kuis siswa
+- Token JWT untuk hasil kuis (berlaku 7 hari)
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router) + TypeScript
+- **UI**: shadcn/ui + Tailwind CSS
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: Auth.js (NextAuth) v5 beta
+- **Validasi**: Zod
+- **Testing**: Vitest
+
+## Instalasi
+
+### 1. Clone & Install
+
+\`\`\`bash
+git clone <url-repo-anda>
+cd quiz-sd
+npm install
+\`\`\`
+
+### 2. Buat file .env.local
+
+\`\`\`env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGci...
+SUPABASE_SERVICE_ROLE_KEY=eyJhbGci...
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=isi_dengan_random_string_panjang
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=admin123
+\`\`\`
+
+Untuk generate NEXTAUTH_SECRET:
+\`\`\`bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+\`\`\`
+
+### 3. Setup Supabase
+
+Buka SQL Editor di dashboard Supabase, jalankan dua file berikut secara berurutan:
+
+- `supabase/migration.sql` — membuat tabel
+- `supabase/seed.sql` — mengisi data awal
+
+### 4. Jalankan Development Server
+
+\`\`\`bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+\`\`\`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Buka [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Akun Admin Default
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Username | Password |
+|---|---|
+| admin | admin123 |
 
-## Learn More
+Akses panel admin di [http://localhost:3000/admin](http://localhost:3000/admin)
 
-To learn more about Next.js, take a look at the following resources:
+## Struktur Halaman
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Halaman | URL |
+|---|---|
+| Daftar kuis | `/` |
+| Halaman kuis | `/quiz/[slug]` |
+| Halaman hasil | `/result/[token]` |
+| Login admin | `/admin/login` |
+| Dashboard admin | `/admin` |
+| Manajemen pelajaran | `/admin/subjects` |
+| Manajemen pertemuan | `/admin/meetings` |
+| Bank soal | `/admin/questions` |
+| Riwayat attempt | `/admin/attempts` |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Menjalankan Test
 
-## Deploy on Vercel
+\`\`\`bash
+npx vitest run
+\`\`\`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Struktur Folder
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+\`\`\`
+quiz-sd/
+├── app/
+│   ├── admin/
+│   │   ├── (protected)/   # halaman admin (butuh login)
+│   │   └── login/
+│   ├── api/               # API routes
+│   ├── quiz/[slug]/       # halaman kuis
+│   └── result/[token]/    # halaman hasil
+├── components/
+│   ├── admin/
+│   ├── quiz/
+│   └── ui/                # shadcn/ui components
+├── lib/
+│   ├── supabase/
+│   ├── validations/
+│   ├── auth.ts
+│   ├── token.ts
+│   └── utils.ts
+└── tests/
+\`\`\`
+\`\`\`
