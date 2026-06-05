@@ -63,7 +63,7 @@ Aplikasi kuis pembelajaran interaktif untuk latihan Ujian Sekolah Dasar, dibangu
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/username/quiz-sd.git
+git clone https://github.com/Yasin-efendi/quiz-sd.git
 cd quiz-sd
 npm install
 ```
